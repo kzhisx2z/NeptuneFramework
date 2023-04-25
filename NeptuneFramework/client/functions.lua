@@ -1,4 +1,15 @@
+Neptune = {}
 
+Neptune.PlayerData = {}
+Neptune.PlayerLoaded = false
+
+Neptune.Game = {}
+
+Neptune.Streaming = {}
+
+exports('getObject', function()
+    return Neptune
+end)
 
 function Neptune.IsPlayerLoaded()
     return Neptune.PlayerLoaded
@@ -6,6 +17,17 @@ end
 
 function Neptune.GetPlayerData()
     return Neptune.PlayerData
+end
+
+function Neptune.SetPlayerData(key, value)
+    local current = Neptune.PlayerData[key]
+    Neptune[key] = value
+
+    if key ~= 'inventory' and key ~= 'loadout' then
+        if value ~= current then
+            TriggerEvent('neptune:setPlayerData', key, value, current)
+        end
+    end
 end
 
 function Neptune.Notify(message)
@@ -41,4 +63,6 @@ function Neptune.ShowHelpNotification(message, thisFrame, beep, duration)
         EndTextCommandDisplayHelp(0, false, beep, duration or -1)
     end
 end
+
+
 

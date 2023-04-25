@@ -1,6 +1,6 @@
 function Neptune.Game.SpawnVehicle(model, coords, heading, callback)
     local vectorCoords = type(coords) == 'vector3' and coords or vector3(coords.x, coords.y, coords.z)
-    local playerCoords = GetEntityCoords(Neptune.PlayerData.Ped)
+    local playerCoords = GetEntityCoords(PlayerPedId())
 
     local distance = #(playerCoords - vectorCoords)
 
@@ -13,7 +13,7 @@ function Neptune.Game.SpawnVehicle(model, coords, heading, callback)
         Neptune.Streaming.RequestModel(model)
 
         local vehicle = CreateVehicle(model, vectorCoords, heading, true, true)
-        local networkId = NetworkGetNetworkIdFromEntity(vehicle)
+        local networkId = VehToNet(vehicle)
 
         SetModelAsNoLongerNeeded(model)
         SetNetworkIdCanMigrate(networkId, true)
@@ -28,6 +28,7 @@ function Neptune.Game.SpawnVehicle(model, coords, heading, callback)
         end
     end)
 end
+
 
 function Neptune.Game.GetPeds()
     return GetGamePool('CPed')
@@ -60,7 +61,7 @@ function Neptune.Game.GetClosestEntity(entities, isPlayerEntities, coords, filte
     if coords then
         coords = type(coords) == 'vector3' and coords or vector3(coords.x, coords.y, coords.z)
     else
-        coords = GetEntityCoords(Neptune.PlayerData.Ped)
+        coords = GetEntityCoords(PlayerPedId())
     end
 
     if filter then

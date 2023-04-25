@@ -1,6 +1,6 @@
 local isInVehicle = false
 local isEnteringVehicle = false
-local playerPed = Neptune.PlayerData.Ped
+local playerPed = PlayerPedId()
 
 local function GetVehicleData(vehicle)
     if DoesEntityExist(vehicle) then
@@ -13,7 +13,7 @@ local function GetVehicleData(vehicle)
 end
 
 CreateThread(function()
-    if not isInVehicle and not IsPlayerDead() then
+    if not isInVehicle and not IsPlayerDead(playerPed) then
         if DoesEntityExist(GetVehiclePedIsTryingToEnter(playerPed) and not isEnteringVehicle) then
             isEnteringVehicle = true
 
