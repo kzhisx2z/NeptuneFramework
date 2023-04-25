@@ -34,3 +34,17 @@ RegisterNetEvent('neptune:onPlayerJoined', function()
     end
 end)
 
+RegisterNetEvent('playerDropped', function(reason)
+    local _source = source
+    local player = Neptune.GetPlayerFromId(_source)
+
+    if player then
+        TriggerEvent('esx:playerDropped', player, reason)
+
+        Uranus.PlayersByIdentifier[player.getIdentifier()] = nil
+        Uranus.SavePlayer(player, function()
+            Neptune.Players[_source] = nil
+        end)
+    end
+end)
+
