@@ -59,6 +59,7 @@ function Uranus.SavePlayer(player, callback)
             function(rowsChanged)
                 if rowsChanged > 0 then
                     TriggerEvent('neptune:playerSaved', player)
+                    print('cc')
                     print(('Saved player ^5%s'):format(player.getName()))
                 end
 
