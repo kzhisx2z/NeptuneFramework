@@ -160,8 +160,10 @@ function LoadNeptunePlayer(identifier, source, isNew)
                 maxWeight = player.getMaxWeight(),
                 identity = player.getIdentity(),
                 dead = false,
-            }, isNew, userData.skin)
+            }, isNew, userData.skin
+    )
 
+    player.updateCoords()
 end
 
 function CreateNeptunePlayer(identifier, source)

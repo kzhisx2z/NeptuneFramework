@@ -93,7 +93,7 @@ end)
 
 RegisterNetEvent('neptune:restoreLoadout', function()
     local ammoTypes = {}
-    local playerPed = PlayerPedId()
+    local playerPed = Neptune.PlayerData.ped
 
     RemoveAllPedWeapons(playerPed, true)
 

@@ -59,6 +59,10 @@ function CreatePlayerObject(source, identifier, group, accounts, inventory, weig
         return self.metadata
     end
 
+    function self.getName()
+        return self.name
+    end
+
     function self.getIdentity()
         return self.identity
     end
@@ -97,6 +101,27 @@ function CreatePlayerObject(source, identifier, group, accounts, inventory, weig
 
     function self.kick(reason)
         DropPlayer(self.source, reason)
+    end
+
+    function self.updateCoords()
+        _SetTimeout(1000, function()
+            if DoesEntityExist(self.ped) then
+                local coords = GetEntityCoords(self.ped)
+                local distance = #(coords - vector3(self.coords.x, self.coords.y, self.coords.z))
+
+                if distance > 1.5 then
+                    local heading = GetEntityHeading(self.ped)
+                    self.coords = {
+                        x = coords.x,
+                        y = coords.y,
+                        z = coords.z,
+                        heading = heading or 0.0
+                    }
+                end
+            end
+
+            self.updateCoords()
+        end)
     end
 
     function self.setAccountMoney(accountName, money)
