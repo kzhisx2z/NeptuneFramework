@@ -6,6 +6,12 @@ function Neptune.Streaming.RequestModel(model, callback)
             Wait(0)
         end
     end
+
+    if callback then
+        callback()
+
+
+    end
 end
 
 function Neptune.Streaming.RequestCollision(entity, coords)

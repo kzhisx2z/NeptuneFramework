@@ -28,4 +28,5 @@ server_scripts {
 dependencies {
     '/native:0x6AE51D4B',
     'spawnmanager',
+    'oxmysql'
 }

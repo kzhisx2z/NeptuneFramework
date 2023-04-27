@@ -67,17 +67,14 @@ RegisterNetEvent('neptune:playerLoaded', function(player, isNew, skin)
     if Config.DisablePoliceAudioFlag then
         SetAudioFlag('PoliceScannerDisabled', true)
     end
+
+    ClearPlayerWantedLevel(playerId)
+    SetMaxWantedLevel(0)
 end)
 
 RegisterNetEvent('neptune:onPlayerLogout', function()
     Neptune.PlayerLoaded = false
 end)
---
---local function OnPlayerSpawn()
---    Neptune.SetPlayerData('dead', false)
---end
---
---RegisterNetEvent('playerSpawned', OnPlayerSpawn())
 
 RegisterNetEvent('neptune:onPlayerDeath', function()
     Neptune.SetPlayerData('dead', true)

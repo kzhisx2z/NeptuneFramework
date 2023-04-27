@@ -1,6 +1,7 @@
-local isInVehicle = false
-local isEnteringVehicle = false
-local playerPed = Neptune.PlayerData.ped
+local IsInVehicle = false
+local IsEnteringVehicle = false
+local CurrentVehicle = {}
+local PlayerPed = Neptune.PlayerData.ped
 
 local function GetVehicleData(vehicle)
     if DoesEntityExist(vehicle) then
@@ -13,25 +14,51 @@ local function GetVehicleData(vehicle)
 end
 
 CreateThread(function()
-    if not IsPlayerDead(playerPed) then
-        if not isInVehicle then
-            if DoesEntityExist(GetVehiclePedIsTryingToEnter(playerPed) and not isEnteringVehicle) then
-                isEnteringVehicle = true
+    while true do
+        if PlayerPed ~= PlayerPedId() then
+            PlayerPed = PlayerPedId()
+            Neptune.SetPlayerData('ped', PlayerPed)
+            TriggerEvent('neptune:playerPedChanged', PlayerPed)
+            TriggerServerEvent('neptune:playerPedChanged', PedToNet(PlayerPed))
+        end
 
-                local vehicle = GetVehiclePedIsTryingToEnter(playerPed)
-                local plate = GetVehicleNumberPlateText(vehicle)
-                local seat = GetSeatPedIsTryingToEnter(playerPed)
-                local displayName, networkId = GetVehicleData(vehicle)
+        if not IsPlayerDead(PlayerPed) then
+            if not IsInVehicle then
+                if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPed) and not IsEnteringVehicle) then
+                    IsEnteringVehicle = true
 
-                TriggerEvent('neptune:enteringVehicle', vehicle, plate, seat, networkId, displayName)
-                TriggerServerEvent('neptune:enteringVehicle', vehicle, plate, seat, networkId, displayName)
-            end
-        else
-            if not IsPedInAnyVehicle(playerPed) then
+                    local vehicle = GetVehiclePedIsTryingToEnter(PlayerPed)
+                    local plate = GetVehicleNumberPlateText(vehicle)
+                    local seat = GetSeatPedIsTryingToEnter(PlayerPed)
+                    local displayName, networkId = GetVehicleData(vehicle)
 
+                    TriggerEvent('neptune:enteringVehicle', vehicle, plate, seat, networkId, displayName)
+                    TriggerServerEvent('neptune:enteringVehicle', vehicle, plate, seat, networkId, displayName)
+                elseif IsPedInAnyVehicle(PlayerPed) then
+                    IsEnteringVehicle = false
+                    IsInVehicle = true
+
+                    CurrentVehicle = {
+                        Vehicle = GetVehiclePedIsUsing(PlayerPed),
+                        Seat = GetPedVehicleSeat,
+                        DisplayName, NetworkId = GetVehicleData(CurrentVehicle.Vehicle)
+                    }
+
+                    TriggerEvent('neptune:enteredVehicle', CurrentVehicle.Vehicle, CurrentVehicle.Seat, CurrentVehicle.DisplayName, CurrentVehicle.NetworkId)
+                    TriggerServerEvent('neptune:enteredVehicle', CurrentVehicle.Vehicle, CurrentVehicle.Seat, CurrentVehicle.DisplayName, CurrentVehicle.NetworkId)
+                end
+            else
+                if not IsPedInAnyVehicle(PlayerPed) then
+                    IsInVehicle = false
+
+                    TriggerEvent('neptune:existedVehicle', CurrentVehicle.Vehicle, CurrentVehicle.Seat, CurrentVehicle.DisplayName, CurrentVehicle.NetworkId)
+                    TriggerServerEvent('neptune:exitedVehicle', CurrentVehicle.Vehicle, CurrentVehicle.Seat, CurrentVehicle.DisplayName, CurrentVehicle.NetworkId)
+
+                    CurrentVehicle = {}
+                end
             end
         end
-    end
 
-    _Wait(200)
+        _Wait(200)
+    end
 end)

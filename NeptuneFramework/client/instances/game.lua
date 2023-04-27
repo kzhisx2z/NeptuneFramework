@@ -5,7 +5,7 @@ function Neptune.Game.SpawnVehicle(model, coords, heading, callback)
     local distance = #(playerCoords - vectorCoords)
 
     if distance > 424 then
-        print(('~r~[Error]~s~ Resource ~b~%s~s~ tried to spawn vehicle but the position is too far away.'):format(GetInvokingResource()))
+        print(('Resource ^5%s^7 tried to spawn vehicle but the position is too far away.'):format(GetInvokingResource()))
         return
     end
 
@@ -56,7 +56,7 @@ end
 function Neptune.Game.GetClosestEntity(entities, isPlayerEntities, coords, filter)
     local closestEntity = -1
     local closestEntityDistance = -1
-    local filteredEntities = nil
+    local filteredEntities
 
     if coords then
         coords = type(coords) == 'vector3' and coords or vector3(coords.x, coords.y, coords.z)
@@ -104,19 +104,19 @@ function Neptune.Game.GetVehicleProperties(vehicle)
     local hasCustomPrimaryColor = GetIsVehiclePrimaryColourCustom(vehicle)
     local dashboardColor = GetVehicleDashboardColor(vehicle)
     local interiorColor = GetVehicleInteriorColour(vehicle)
-    local customPrimaryColor = nil
+    local customPrimaryColor
     if hasCustomPrimaryColor then
         customPrimaryColor = {GetVehicleCustomPrimaryColour(vehicle)}
     end
 
     local hasCustomXenonColor, customXenonColorR, customXenonColorG, customXenonColorB = GetVehicleXenonLightsCustomColor(vehicle)
-    local customXenonColor = nil
+    local customXenonColor
     if hasCustomXenonColor then
         customXenonColor = {customXenonColorR, customXenonColorG, customXenonColorB}
     end
 
     local hasCustomSecondaryColor = GetIsVehicleSecondaryColourCustom(vehicle)
-    local customSecondaryColor = nil
+    local customSecondaryColor
     if hasCustomSecondaryColor then
         customSecondaryColor = {GetVehicleCustomSecondaryColour(vehicle)}
     end
