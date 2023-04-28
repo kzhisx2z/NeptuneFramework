@@ -44,7 +44,7 @@ RegisterNetEvent('gameEventTriggered', function(event, data)
             if isVictimDied and NetworkGetPlayerIndexFromPed(victim) == player and (IsPedDeadOrDying(victim, true) or IsPedFatallyInjured(victim)) then
                 local playerPed = Neptune.PlayerData.ped
                 local killer = GetPedSourceOfDeath(playerPed)
-                local deathCause = GetPedCauseOfDeath(killer)
+                local deathCause = GetPedCauseOfDeath(playerPed)
                 local killerClientId = NetworkGetPlayerIndexFromPed(killer)
 
                 if killer ~= playerPed and killerClientId and NetworkIsPlayerActive(killerClientId) then
